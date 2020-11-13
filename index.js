@@ -5,9 +5,6 @@ import { readFileSync } from "fs";
 import { resolvers } from "./resolver.js";
 import playground from "graphql-playground-middleware-express";
 import {connect} from "./database";
-require('dotenv').config()
-
-console.log(playground);
 
 const typeDefs = readFileSync("schema.graphql", "utf8");
 
