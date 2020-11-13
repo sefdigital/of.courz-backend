@@ -1,0 +1,63 @@
+type Workshop {
+    title: String!
+    subTitle: String
+    organizer: User
+    description: String!
+    material: String
+    requirements: String
+    categories: [String!]!
+    thumbnail: String!
+    events: [Event!]!
+}
+
+input WorkshopInput {
+    title: String!
+    subTitle: String
+    description: String!
+    material: String
+    requirements: String
+    categories: [String!]!
+    thumbnail: String!
+    events: [EventInput!]!
+}
+
+type Event {
+    price: Float,
+    notes: String
+    publicLocation: String!
+    privateLocation: String
+    maxParticipants: Int!
+    dates: [Date!]!
+}
+
+input EventInput {
+    price: Float
+    notes: String
+    publicLocation: String!
+    privateLocation: String
+    maxParticipants: Int!
+    dates: [DateInput!]!
+}
+
+type Date {
+    startTime: Int!
+    endTime: Int
+}
+
+input DateInput {
+    startTime: Int
+    endTime: Int
+}
+
+type User {
+    firstName: String!
+    lastName: String!
+}
+
+type Query {
+    workshops: [Workshop]
+}
+
+type Mutation {
+    addWorkshop(workshop: WorkshopInput): Workshop
+}

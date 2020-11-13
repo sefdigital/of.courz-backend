@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon -r esm"
   },
   "repository": {
     "type": "git",
@@ -14,5 +14,16 @@
   "bugs": {
     "url": "https://github.com/sef-webseiten/sef-workshops-backend/issues"
   },
-  "homepage": "https://github.com/sef-webseiten/sef-workshops-backend#readme"
+  "homepage": "https://github.com/sef-webseiten/sef-workshops-backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.4.0",
+    "graphql-playground-middleware-express": "^1.7.22",
+    "graphql-tools": "^7.0.1",
+    "mongoose": "^5.10.13",
+    "mongoose-type-url": "^2.1.0"
+  }
 }

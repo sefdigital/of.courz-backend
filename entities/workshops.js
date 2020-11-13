@@ -1,0 +1,30 @@
+import { workshopModel } from "../models/workshop.js"
+import { categoryModel } from "../models/category";
+
+export const queries = {
+    workshops: async () => {
+        const filter = {};
+        return workshopModel.find(filter);
+    }
+}
+
+export const mutations = {
+    addWorkshop: async (parent, { workshop }) => {
+
+        // convert category strings to ids
+        workshop.categories = await Promise.all(workshop.categories.map(async category => (await categoryModel.findOne({ name: category }))._id));
+
+        // ToDo: set organizer by firebase function caller
+        workshop.organizer = process.env.DEFAULT_USER;
+
+        // create mongoose workshop from args
+        workshop = new workshopModel(workshop);
+
+        // save workshop in db
+        await workshop.save();
+
+        console.log(`Created workshop ${workshop.title} by ${workshop.organizer}`)
+
+        return workshop;
+    }
+}
