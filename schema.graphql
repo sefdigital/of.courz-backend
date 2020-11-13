@@ -1,4 +1,9 @@
+# - - - - - - - - - - - -
+# WORKSHOP
+# - - - - - - - - - - - -
+
 type Workshop {
+    _id: ID!
     title: String!
     subTitle: String
     organizer: User
@@ -22,7 +27,8 @@ input WorkshopInput {
 }
 
 type Event {
-    price: Float,
+    _id: ID!
+    price: Float
     notes: String
     publicLocation: String!
     privateLocation: String
@@ -49,15 +55,32 @@ input DateInput {
     endTime: Int
 }
 
+# - - - - - - - - - - - -
+# USER
+# - - - - - - - - - - - -
+
 type User {
     firstName: String!
     lastName: String!
 }
 
+# - - - - - - - - - - - -
+# PAYMENTS
+# - - - - - - - - - - - -
+
+
 type Query {
+
+    # WORKSHOPS
     workshops: [Workshop]
 }
 
 type Mutation {
+
+    # WORKSHOPS
     addWorkshop(workshop: WorkshopInput): Workshop
+
+    # PAYMENTS
+    createOrder(workshopID: String!, eventID: String!, participants: Int!): String # returns order id
+
 }
