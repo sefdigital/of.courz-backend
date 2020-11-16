@@ -8,6 +8,7 @@ export const workshopModel = mongoose.model('workshop', {
     subTitle: { type: String },
     organizer: { type: String, required: true },
     events: [{
+        _id: { type: ObjectId, required: true },
         price: { type: Number, required: true },
         dates: [{
             startTime: { type: Number, required: true },
