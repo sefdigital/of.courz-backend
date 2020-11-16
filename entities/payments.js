@@ -61,6 +61,7 @@ export const mutations = {
                 headers: DEFAULT_API_HEADER,
             });
 
+        console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`)
 
         return data.id;
     }
