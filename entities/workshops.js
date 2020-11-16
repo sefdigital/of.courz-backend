@@ -1,10 +1,18 @@
 import { workshopModel } from "../models/workshop.js"
 import { categoryModel } from "../models/category";
 
+function convertCategoriesToString(workshop) {
+    workshop.categories = workshop.categories.map(category => category.name);
+    return workshop;
+}
+
 export const queries = {
     workshops: async () => {
-        const filter = {};
-        return workshopModel.find(filter);
+        let workshops = await workshopModel.find({ }).populate("categories");
+
+        workshops = workshops.map(w => w.toObject()).map(convertCategoriesToString);
+
+        return workshops;
     }
 }
 
