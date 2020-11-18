@@ -13,6 +13,14 @@ type Workshop {
     categories: [String!]!
     thumbnail: String!
     events: [Event!]!
+
+    # calculated fields
+    minPrice: Float
+    nextDate: String
+    nextDuration: Int
+    nextParticipants: Int
+    bookedPaticipants: Int
+    averageRating: Int
 }
 
 input WorkshopInput {
@@ -46,8 +54,8 @@ input EventInput {
 }
 
 type Date {
-    startTime: Int!
-    endTime: Int
+    startTime: String!
+    endTime: String!
 }
 
 input DateInput {
