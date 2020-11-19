@@ -2,9 +2,16 @@
   "name": "sef-workshops-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "node.js",
   "scripts": {
-    "start": "nodemon -r esm -r dotenv/config "
+    "start": "nodemon -r esm -r dotenv/config ",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "12"
   },
   "repository": {
     "type": "git",
@@ -22,10 +29,18 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-graphql": "^0.11.0",
+    "firebase-admin": "^9.4.1",
+    "firebase-functions": "^3.11.0",
     "graphql": "^15.4.0",
     "graphql-playground-middleware-express": "^1.7.22",
     "graphql-tools": "^7.0.1",
     "mongoose": "^5.10.13",
-    "mongoose-type-url": "^2.1.0"
+    "mongoose-type-url": "^2.1.0",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/register": "^7.0.0"
   }
 }

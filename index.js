@@ -6,6 +6,10 @@ import { resolvers } from "./resolver.js";
 import playground from "graphql-playground-middleware-express";
 import {connect} from "./database";
 import cors from "cors";
+import * as functions from 'firebase-functions'
+import * as admin from "firebase-admin";
+
+admin.initializeApp();
 
 const typeDefs = readFileSync("schema.graphql", "utf8");
 
@@ -26,6 +30,8 @@ app.use('/graphql', graphqlHTTP({
 app.get("/playground", playground({ endpoint: "/graphql" }));
 app.get("/", playground({ endpoint: "/graphql" }));
 
-app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
+// app.listen(4001, () => console.log('Now browse to localhost:4000/graphql'));
 
 connect();
+
+export const api = functions.https.onRequest(app);

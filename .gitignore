@@ -1,3 +1,7 @@
 node_modules
 .env
 .idea
+.firebaserc
+firebase.json
+ui-debug.log
+firebase-debug.log
