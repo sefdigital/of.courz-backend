@@ -15,7 +15,9 @@ function paypalApiUrl(path) {
 
 export const mutations = {
 
-    createOrder: async (parent, { workshopID, eventID, participants }) => {
+    createOrder: async (parent, { workshopID, eventID, participants, affiliate }) => {
+
+        // ToDo: implement affiliate
 
         let workshop = await workshopModel.findOne({ _id: workshopID }), price = 0;
 

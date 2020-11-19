@@ -81,6 +81,6 @@ type Mutation {
     addWorkshop(workshop: WorkshopInput): Workshop
 
     # PAYMENTS
-    createOrder(workshopID: String!, eventID: String!, participants: Int!): String # returns order id
+    createOrder(workshopID: String!, eventID: String!, participants: Int!, affiliate: String): String # returns order id
 
 }
