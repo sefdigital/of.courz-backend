@@ -1,21 +1,10 @@
 import axios from "axios";
 import { workshopModel } from "../models/workshop";
-
-const PAYPAL_BASE_PATH = process.env.PAYPAL_BASE_PATH, PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID,
-    PAYPAL_SECRET = process.env.PAYPAL_SECRET;
-
-const DEFAULT_API_HEADER = {
-    "Content-Type": "application/json",
-    "Authorization": `Basic ${Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString("base64")}`
-}
-
-function paypalApiUrl(path) {
-    return PAYPAL_BASE_PATH + path;
-}
+import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../paypal/constants";
 
 export const mutations = {
 
-    createOrder: async (parent, { workshopID, eventID, participants, affiliate }) => {
+    createOrder: async (parent, { workshopID, eventID, participants, affiliate }, { token }) => {
 
         // ToDo: implement affiliate
 
@@ -38,6 +27,7 @@ export const mutations = {
                 "intent": "CAPTURE",
                 "purchase_units": [
                     {
+                        reference_id: `${workshopID}-${eventID}`,
                         amount: {
                             currency_code: "EUR",
                             value: price * participants,
@@ -58,10 +48,7 @@ export const mutations = {
                             quantity: participants
                         }]
                     }]
-            },
-            {
-                headers: DEFAULT_API_HEADER,
-            });
+        }, DEFAULT_AXIOS_OPTIONS );
 
         console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`)
 
