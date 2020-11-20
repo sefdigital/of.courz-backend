@@ -1,12 +1,20 @@
 import axios from "axios";
 import { workshopModel } from "../models/workshop";
+import { bookingModel } from "../models/booking";
 import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../paypal/constants";
+import ObjectId from "mongoose/lib/schema/objectid";
 
 export const mutations = {
 
-    createOrder: async (parent, { workshopID, eventID, participants, affiliate }, { token }) => {
+    createOrder: async (parent, { workshopID, eventID, participants, affiliate }, { user }) => {
 
         // ToDo: implement affiliate
+
+        console.log(user);
+
+        // ToDo: create manifest
+        if (!user)
+            throw new Error("not authorised");
 
         let workshop = await workshopModel.findOne({ _id: workshopID }), price = 0;
 
@@ -48,7 +56,16 @@ export const mutations = {
                             quantity: participants
                         }]
                     }]
-        }, DEFAULT_AXIOS_OPTIONS );
+        }, DEFAULT_AXIOS_OPTIONS);
+        
+        let booking = new bookingModel({
+            order: data.id,
+            workshop: workshopID,
+            event: eventID,
+            user: user.user_id
+        });
+
+        booking.save();
 
         console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`)
 
