@@ -4,9 +4,7 @@
   "description": "",
   "main": "node.js",
   "scripts": {
-    "start": "nodemon -r esm -r dotenv/config ",
-    "serve": "firebase emulators:start --only functions",
-    "shell": "firebase functions:shell",
+    "serve": "firebase emulators:start",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -23,16 +21,11 @@
   },
   "homepage": "https://github.com/sef-webseiten/sef-workshops-backend#readme",
   "dependencies": {
+    "apollo-server-cloud-functions": "^2.19.0",
     "axios": "^0.21.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "esm": "^3.2.25",
-    "express": "^4.17.1",
-    "express-graphql": "^0.11.0",
     "firebase-admin": "^9.4.1",
     "firebase-functions": "^3.11.0",
     "graphql": "^15.4.0",
-    "graphql-playground-middleware-express": "^1.7.22",
     "graphql-tools": "^7.0.1",
     "mongoose": "^5.10.13",
     "mongoose-type-url": "^2.1.0",

@@ -1,37 +1,47 @@
-import express from 'express';
-import { graphqlHTTP } from 'express-graphql';
-import { makeExecutableSchema } from 'graphql-tools';
 import { readFileSync } from "fs";
 import { resolvers } from "./resolver.js";
-import playground from "graphql-playground-middleware-express";
-import {connect} from "./database";
-import cors from "cors";
+import { connect } from "./database";
 import * as functions from 'firebase-functions'
 import * as admin from "firebase-admin";
+import { ApolloServer } from "apollo-server-cloud-functions";
+import { handleWebhook } from "./paypal/webhooks.js";
+import util from "util";
 
 admin.initializeApp();
 
+const region = 'europe-west3'; // Frankfurt 
+const europeFunction = functions.region(region);
+
+console.logFull = input => console.log(util.inspect(input, { showHidden: false, depth: null }));
+
 const typeDefs = readFileSync("schema.graphql", "utf8");
 
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: async ({ req }) => {
+
+        const token = (req.headers.authorization || '').replace("Bearer ", "");
+
+        if (token) {
+            try {
+                const user = await admin.auth().verifyIdToken(token);
+                return { user }
+            } catch (e) { }
+        }
+
+    },
 });
 
-const app = express();
-
-app.use(cors({origin: "*"}))
-
-app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    graphiql: false
-}));
-
-app.get("/playground", playground({ endpoint: "/graphql" }));
-app.get("/", playground({ endpoint: "/graphql" }));
-
-// app.listen(4001, () => console.log('Now browse to localhost:4000/graphql'));
+const handler = server.createHandler({
+    cors: {
+        origin: true,
+        credentials: true,
+    },
+});
 
 connect();
 
-export const api = functions.https.onRequest(app);
+export const api = europeFunction.https.onRequest(handler);
+
+export const paypal = europeFunction.https.onRequest(handleWebhook)
