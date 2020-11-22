@@ -21,8 +21,12 @@
   },
   "homepage": "https://github.com/sef-webseiten/sef-workshops-backend#readme",
   "dependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/register": "^7.0.0",
     "apollo-server-cloud-functions": "^2.19.0",
     "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
     "firebase-admin": "^9.4.1",
     "firebase-functions": "^3.11.0",
     "graphql": "^15.4.0",
@@ -30,10 +34,5 @@
     "mongoose": "^5.10.13",
     "mongoose-type-url": "^2.1.0",
     "regenerator-runtime": "^0.13.7"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
-    "@babel/register": "^7.0.0"
   }
 }
