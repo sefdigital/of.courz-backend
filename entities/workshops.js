@@ -1,5 +1,6 @@
 import { workshopModel } from "../models/workshop.js"
 import { categoryModel } from "../models/category";
+import mongoose from "mongoose";
 
 function convertCategoriesToString(workshop) {
     workshop.categories = workshop.categories.map(category => category.name);
@@ -8,7 +9,7 @@ function convertCategoriesToString(workshop) {
 
 export const queries = {
     workshops: async () => {
-        let workshops = await workshopModel.find({ }).populate("categories");
+        let workshops = await workshopModel.find({}).populate("categories");
 
         workshops = workshops.map(w => w.toObject()).map(convertCategoriesToString);
 
@@ -34,6 +35,16 @@ export const mutations = {
         console.log(`Created workshop ${workshop.title} by ${workshop.organizer}`)
 
         return workshop;
+    },
+    addCategory: async (parent, { name }) => {
+        try {
+            let c = new categoryModel({ _id: new mongoose.Types.ObjectId(), name });
+            await c.save();
+        } catch (e) {
+
+        }
+
+        return name;
     }
 }
 

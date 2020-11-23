@@ -51,8 +51,8 @@ type Date {
 }
 
 input DateInput {
-    startTime: Int
-    endTime: Int
+    startTime: String
+    endTime: String
 }
 
 # - - - - - - - - - - - -
@@ -79,6 +79,7 @@ type Mutation {
 
     # WORKSHOPS
     addWorkshop(workshop: WorkshopInput): Workshop
+    addCategory(name: String!): String
 
     # PAYMENTS
     createOrder(workshopID: String!, eventID: String!, participants: Int!, affiliate: String): String # returns order id

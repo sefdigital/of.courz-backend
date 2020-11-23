@@ -4,6 +4,6 @@ import ObjectId from "mongoose/lib/schema/objectid";
 require('mongoose-type-url');
 
 export const categoryModel = mongoose.model('category', {
-    _id: { type: ObjectId },
-    name: { type: String, required: true }
+    _id: { type: ObjectId, auto: true },
+    name: { type: String, unique: true, required: true }
 });
