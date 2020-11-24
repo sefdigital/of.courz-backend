@@ -1,7 +1,7 @@
 import axios from "axios";
-import { workshopModel } from "../models/workshop";
-import { bookingModel } from "../models/booking";
-import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../paypal/constants";
+import { workshopModel } from "../../models/workshop";
+import { bookingModel } from "../../models/booking";
+import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../../paypal/constants";
 import ObjectId from "mongoose/lib/schema/objectid";
 
 export const mutations = {

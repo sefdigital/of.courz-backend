@@ -13,6 +13,7 @@ type Workshop {
     categories: [String!]!
     thumbnail: String!
     events: [Event!]!
+    ratings: [Rating!]!
 }
 
 input WorkshopInput {
@@ -55,6 +56,26 @@ input DateInput {
     endTime: String
 }
 
+type Rating {
+    _id: ID!
+    content: Int!
+    composition: Int!
+    clarity: Int!
+    expertise: Int!
+    goalAchievement: Int!
+    text: String!
+    author: User
+}
+
+input RatingInput {
+    content: Int!
+    composition: Int!
+    clarity: Int!
+    expertise: Int!
+    goalAchievement: Int!
+    text: String!
+}
+
 # - - - - - - - - - - - -
 # USER
 # - - - - - - - - - - - -
@@ -80,6 +101,7 @@ type Mutation {
     # WORKSHOPS
     addWorkshop(workshop: WorkshopInput): Workshop
     addCategory(name: String!): String
+    addRating(workshop: String! rating: RatingInput!): Rating
 
     # PAYMENTS
     createOrder(workshopID: String!, eventID: String!, participants: Int!, affiliate: String): String # returns order id

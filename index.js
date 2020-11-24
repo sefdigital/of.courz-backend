@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
-import { resolvers } from "./resolver.js";
-import { connect } from "./database";
+import { resolvers } from "./graphql/entities/index";
+import { connect } from "./models";
 import * as functions from 'firebase-functions'
 import * as admin from "firebase-admin";
 import { ApolloServer } from "apollo-server-cloud-functions";
@@ -14,7 +14,7 @@ const europeFunction = functions.region(region);
 
 console.logFull = input => console.log(util.inspect(input, { showHidden: false, depth: null }));
 
-const typeDefs = readFileSync("schema.graphql", "utf8");
+const typeDefs = readFileSync("graphql/schema.graphql", "utf8");
 
 const server = new ApolloServer({
     typeDefs,

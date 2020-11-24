@@ -1,5 +1,6 @@
-import { workshopModel } from "../models/workshop.js"
-import { categoryModel } from "../models/category";
+import { workshopModel } from "../../models/workshop"
+import { categoryModel } from "../../models/category";
+import { ratingModel } from "../../models/rating"
 import mongoose from "mongoose";
 
 function convertCategoriesToString(workshop) {
@@ -52,5 +53,8 @@ export const entities = {
     Date: {
         startTime: p => new Date(p.startTime).toISOString(),
         endTime: p => new Date(p.endTime).toISOString()
+    },
+    Workshop: {
+        ratings: async w => await Promise.all(w.ratings.map(async r => await ratingModel.findOne({ _id: r })))
     }
 }
