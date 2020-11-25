@@ -33,6 +33,6 @@ export async function captureOrder(webhook) {
 
     const url = webhook.resource.links.filter(l => l.rel == "capture")[0].href;
 
-    await axios.post(url, {}, DEFAULT_AXIOS_OPTIONS); 
+    await axios.post(url, {}, DEFAULT_AXIOS_OPTIONS);
 
 }
