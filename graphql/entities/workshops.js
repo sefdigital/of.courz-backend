@@ -1,6 +1,6 @@
-import { workshopModel } from "../../models/workshop"
+import { workshopModel } from "../../models/workshop";
 import { categoryModel } from "../../models/category";
-import { ratingModel } from "../../models/rating"
+import { ratingModel } from "../../models/rating";
 import mongoose from "mongoose";
 
 function convertCategoriesToString(workshop) {
@@ -16,7 +16,7 @@ export const queries = {
 
         return workshops;
     }
-}
+};
 
 export const mutations = {
     addWorkshop: async (parent, { workshop }) => {
@@ -33,7 +33,7 @@ export const mutations = {
         // save workshop in db
         await workshop.save();
 
-        console.log(`Created workshop ${workshop.title} by ${workshop.organizer}`)
+        console.log(`Created workshop ${workshop.title} by ${workshop.organizer}`);
 
         return workshop;
     },
@@ -42,12 +42,12 @@ export const mutations = {
             let c = new categoryModel({ _id: new mongoose.Types.ObjectId(), name });
             await c.save();
         } catch (e) {
-
+            // ToDo: handle error
         }
 
         return name;
     }
-}
+};
 
 export const entities = {
     Date: {
@@ -57,4 +57,4 @@ export const entities = {
     Workshop: {
         ratings: async w => await Promise.all(w.ratings.map(async r => await ratingModel.findOne({ _id: r })))
     }
-}
+};

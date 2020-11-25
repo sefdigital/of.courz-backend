@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { resolvers } from "./graphql/entities/index";
 import { connect } from "./models";
-import * as functions from 'firebase-functions'
+import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { ApolloServer } from "apollo-server-cloud-functions";
 import { handleWebhook } from "./paypal/webhooks.js";
@@ -9,7 +9,7 @@ import util from "util";
 
 admin.initializeApp();
 
-const region = 'europe-west3'; // Frankfurt 
+const region = "europe-west3"; // Frankfurt 
 const europeFunction = functions.region(region);
 
 console.logFull = input => console.log(util.inspect(input, { showHidden: false, depth: null }));
@@ -21,13 +21,15 @@ const server = new ApolloServer({
     resolvers,
     context: async ({ req }) => {
 
-        const token = (req.headers.authorization || '').replace("Bearer ", "");
+        const token = (req.headers.authorization || "").replace("Bearer ", "");
 
         if (token) {
             try {
                 const user = await admin.auth().verifyIdToken(token);
-                return { user }
-            } catch (e) { }
+                return { user };
+            } catch (e) {
+                return { user: null };
+            }
         }
 
     },
@@ -44,4 +46,4 @@ connect();
 
 export const api = europeFunction.https.onRequest(handler);
 
-export const paypal = europeFunction.https.onRequest(handleWebhook)
+export const paypal = europeFunction.https.onRequest(handleWebhook);

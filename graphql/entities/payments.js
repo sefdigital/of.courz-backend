@@ -2,7 +2,6 @@ import axios from "axios";
 import { workshopModel } from "../../models/workshop";
 import { bookingModel } from "../../models/booking";
 import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../../paypal/constants";
-import ObjectId from "mongoose/lib/schema/objectid";
 
 export const mutations = {
 
@@ -10,7 +9,7 @@ export const mutations = {
 
         // ToDo: implement affiliate
 
-        console.log(user);
+        console.log(user, affiliate);
 
         // ToDo: create manifest
         if (!user)
@@ -32,32 +31,32 @@ export const mutations = {
             throw new Error("Participants needs to be greater than 0");
 
         let { data } = await axios.post(paypalApiUrl("/v2/checkout/orders"), {
-                "intent": "CAPTURE",
-                "purchase_units": [
-                    {
-                        reference_id: `${workshopID}-${eventID}`,
-                        amount: {
-                            currency_code: "EUR",
-                            value: price * participants,
-                            breakdown: {
-                                item_total: {
-                                    currency_code: "EUR",
-                                    value: price * participants,
-                                }
-                            }
-                        },
-                        description: "Ihre Bestellung bei SEF Workshops. ",
-                        items: [{
-                            name: `${workshop.title} Workshop`,
-                            unit_amount: {
+            "intent": "CAPTURE",
+            "purchase_units": [
+                {
+                    reference_id: `${workshopID}-${eventID}`,
+                    amount: {
+                        currency_code: "EUR",
+                        value: price * participants,
+                        breakdown: {
+                            item_total: {
                                 currency_code: "EUR",
-                                value: price
-                            },
-                            quantity: participants
-                        }]
+                                value: price * participants,
+                            }
+                        }
+                    },
+                    description: "Ihre Bestellung bei SEF Workshops. ",
+                    items: [{
+                        name: `${workshop.title} Workshop`,
+                        unit_amount: {
+                            currency_code: "EUR",
+                            value: price
+                        },
+                        quantity: participants
                     }]
+                }]
         }, DEFAULT_AXIOS_OPTIONS);
-        
+
         let booking = new bookingModel({
             order: data.id,
             workshop: workshopID,
@@ -67,9 +66,9 @@ export const mutations = {
 
         booking.save();
 
-        console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`)
+        console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`);
 
         return data.id;
     }
 
-}
+};

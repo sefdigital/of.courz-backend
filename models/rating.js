@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import ObjectId from "mongoose/lib/schema/objectid";
 
-export const ratingModel = mongoose.model('rating', {
+export const ratingModel = mongoose.model("rating", {
     _id: { type: ObjectId, required: true, auto: true },
     content: { type: Number, required: true },
     composition: { type: Number, required: true },
@@ -10,4 +10,4 @@ export const ratingModel = mongoose.model('rating', {
     goalAchievement: { type: Number, required: true },
     text: { type: String },
     author: { type: String, required: true }
-})
+});

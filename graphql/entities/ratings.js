@@ -1,9 +1,8 @@
-import { workshopModel } from "../../models/workshop"
+import { workshopModel } from "../../models/workshop";
 import { ratingModel } from "../../models/rating";
-import mongoose from "mongoose";
 
 export const queries = {
-}
+};
 
 export const mutations = {
     addRating: async (parent, { workshop, rating }, { user }) => {
@@ -11,7 +10,9 @@ export const mutations = {
         // ToDo: authorised
         // ToDo: booked
 
-        rating = new ratingModel({ ...rating, author: "test" })
+        console.log({ user });
+
+        rating = new ratingModel({ ...rating, author: "test" });
 
         console.log(rating);
 
@@ -19,7 +20,7 @@ export const mutations = {
 
         workshop = await workshopModel.findOne({ _id: workshop });
 
-        console.log(workshop)
+        console.log(workshop);
 
         workshop.ratings.push(rating);
 
@@ -27,4 +28,4 @@ export const mutations = {
 
         return rating;
     },
-}
+};

@@ -16,7 +16,7 @@ export async function handleOrderApproved(webhook) {
         console.error("INVALID PURCHASE");
         // ToDo: invalid purchase
     } else {
-        console.info("VALID_PURCHASE")
+        console.info("VALID_PURCHASE");
         try {
             await captureOrder(webhook);
         } catch (e) {

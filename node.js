@@ -1,7 +1,7 @@
-require("@babel/register")({})
+require("@babel/register")({});
 require("regenerator-runtime/runtime");
 const dotenv = require("dotenv");
 
-dotenv.config()
+dotenv.config();
 
-module.exports = require('./index.js')
+module.exports = require("./index.js");

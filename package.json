@@ -4,6 +4,8 @@
   "description": "",
   "main": "node.js",
   "scripts": {
+    "pretest": "eslint --ignore-path .gitignore --fix .",
+    "test": "echo run tests",
     "serve": "firebase emulators:start",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
@@ -34,5 +36,8 @@
     "mongoose": "^5.10.13",
     "mongoose-type-url": "^2.1.0",
     "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.14.0"
   }
 }
