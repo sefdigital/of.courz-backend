@@ -26,7 +26,7 @@ const server = new ApolloServer({
         if (token) {
             try {
                 const user = await admin.auth().verifyIdToken(token);
-                return { user };
+                return { user: { ...user, _id: user.user_id } };
             } catch (e) {
                 return { user: null };
             }

@@ -3,7 +3,14 @@ import ObjectId from "mongoose/lib/schema/objectid";
 
 require("mongoose-type-url");
 
-const visibility = { type: String, enum: ["ALL", "FOLLOWING", "HIDDEN"] };
+export const visibilityEnum = {
+    ALL: "ALL",
+    FOLLOWING: "FOLLOWING",
+    HIDDEN: "HIDDEN",
+    DISABLED: "DISABLED"
+};
+
+const visibility = { type: String, enum: Object.keys(visibilityEnum) };
 
 const workshopSchema = mongoose.Schema({
     _id: { type: ObjectId, required: true, auto: true },

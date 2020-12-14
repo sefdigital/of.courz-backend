@@ -29,7 +29,7 @@ export async function createOrder(orderDetails) {
         order: paypalOrder.id,
         workshop: workshopID,
         event: eventID,
-        user: user.user_id,
+        user: user._id,
         status: paymentStatusCodes.PENDING,
         affiliate,
         price

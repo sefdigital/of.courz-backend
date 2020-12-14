@@ -6,7 +6,7 @@ export const queries = {
     getOrderDetails: async (parent, { id }, { user }) => {
         middlewares.isAuthorized(user);
 
-        let order = await orderModel.findOne({ order: id, user: user.user_id });
+        let order = await orderModel.findOne({ order: id, user: user._id });
 
         if (!order) throw new Error("No order with specified id");
 
