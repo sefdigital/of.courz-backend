@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const db = mongoose.connection;
+export const db = mongoose.connection;
 
 db.on("connecting", () => console.log("connecting to MongoDB..."));
 db.on("connected", () => console.log("MongoDB connected!"));

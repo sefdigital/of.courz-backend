@@ -1,5 +1,6 @@
 import { workshopModel } from "../../models/workshop";
 import { ratingModel } from "../../models/rating";
+import * as middleware from "../middlewares";
 
 export const queries = {
 };
@@ -7,7 +8,7 @@ export const queries = {
 export const mutations = {
     addRating: async (parent, { workshop, rating }, { user }) => {
 
-        // ToDo: authorised
+        middleware.isAuthorized(user);
         // ToDo: booked
 
         console.log({ user });

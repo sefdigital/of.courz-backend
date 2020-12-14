@@ -89,11 +89,21 @@ type User {
 # PAYMENTS
 # - - - - - - - - - - - -
 
+type Order {
+    order: ID!
+    workshop: Workshop!
+    event: Event!
+    user: User!
+    price: Float!
+    status: String!
+}
 
 type Query {
 
     # WORKSHOPS
     workshops: [Workshop]
+
+    getOrderDetails(id: String!): Order
 }
 
 type Mutation {
