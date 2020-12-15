@@ -1,15 +1,16 @@
-import orderModel from "../models/order";
 import { userDetailModel } from "../models/user-detail";
+import { orderModel } from "../models/order";
 
 export function isAuthorized(user) {
     if (!user) throw new Error("Unauthorized");
     else return true;
 }
 
+// ToDo: check the booking status
 export async function hasBookedWorkshop(user, workshopID) {
-    const order = await orderModel.exists({ workshop: workshopID, user: user._id });
+    const exists = await orderModel.exists({ workshop: workshopID, user: user._id });
 
-    if (!order) throw new Error("No booking at workshop");
+    if (!exists) throw new Error("No booking for this workshop");
     else return true;
 }
 

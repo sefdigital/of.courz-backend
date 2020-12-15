@@ -1,12 +1,13 @@
 scalar Date
 scalar URL
+scalar ObjectId
 
 # - - - - - - - - - - - -
 # WORKSHOP
 # - - - - - - - - - - - -
 
 type Workshop {
-    _id: ID!
+    _id: ObjectId!
     title: String!
     subTitle: String
     organizer: User
@@ -31,7 +32,7 @@ input WorkshopInput {
 }
 
 type Event {
-    _id: ID!
+    _id: ObjectId!
     price: Float
     notes: String
     publicLocation: String!
@@ -60,7 +61,7 @@ input WorkshopDateIntervalInput {
 }
 
 type Rating {
-    _id: ID!
+    _id: ObjectId!
     content: Int!
     composition: Int!
     clarity: Int!
@@ -133,11 +134,11 @@ type Mutation {
     # WORKSHOPS
     addWorkshop(workshop: WorkshopInput): Workshop
     addCategory(name: String!): String
-    addRating(workshop: String! rating: RatingInput!): Rating
+    addRating(workshop: ObjectId! rating: RatingInput!): Rating
 
     # USER
     updateUserData(user: UserInput): User!
 
     # PAYMENTS
-    createOrder(workshopID: String!, eventID: String!, participants: Int!, affiliate: String): String # returns order id
+    createOrder(workshopID: ObjectId!, eventID: ObjectId!, participants: Int!, affiliate: String): String # returns order id
 }

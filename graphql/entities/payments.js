@@ -11,9 +11,6 @@ export const queries = {
 
         if (!order) throw new Error("No order with specified id");
 
-        order = await order.populate("workshop").execPopulate();
-        order = { ...order.toJSON(), event: order.workshop.getEventById(order.event.toString()) };
-
         return order;
     },
     myOrders: async (parent, params, { user }) => {

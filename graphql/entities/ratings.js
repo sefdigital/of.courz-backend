@@ -1,4 +1,3 @@
-import { workshopModel } from "../../models/workshop";
 import { ratingModel } from "../../models/rating";
 import * as middleware from "../middlewares";
 
@@ -8,24 +7,16 @@ export const queries = {
 export const mutations = {
     addRating: async (parent, { workshop, rating }, { user }) => {
 
-        middleware.isAuthorized(user);
-        // ToDo: booked
+        await middleware.isAuthorized(user);
+        await middleware.hasBookedWorkshop(user, workshop);
 
-        console.log({ user });
+        const existingReview = await ratingModel.exists({ workshop, author: user._id });
 
-        rating = new ratingModel({ ...rating, author: "test" });
+        if(existingReview) throw new Error("You already reviewed the workshop");
 
-        console.log(rating);
+        rating = new ratingModel({ workshop, ...rating, author: user._id });
 
         await rating.save();
-
-        workshop = await workshopModel.findOne({ _id: workshop });
-
-        console.log(workshop);
-
-        workshop.ratings.push(rating);
-
-        await workshop.save();
 
         return rating;
     },
