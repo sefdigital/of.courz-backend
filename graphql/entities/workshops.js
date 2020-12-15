@@ -1,7 +1,6 @@
 import { workshopModel } from "../../models/workshop";
 import { categoryModel } from "../../models/category";
 import { ratingModel } from "../../models/rating";
-import mongoose from "mongoose";
 import * as middlewares from "../middlewares";
 
 function convertCategoriesToString(workshop) {
@@ -22,9 +21,8 @@ export const queries = {
 export const mutations = {
     addWorkshop: async (parent, { workshop }, { user }) => {
 
-        middlewares.isAuthorized(user);
-
-        // todo: check if wsl'lere
+        await middlewares.isAuthorized(user);
+        await middlewares.isOrganizer(user);
 
         // convert category strings to ids
         workshop.categories = await Promise.all(workshop.categories.map(async category => (await categoryModel.findOne({ name: category }))._id));
@@ -41,19 +39,16 @@ export const mutations = {
         return workshop;
     },
     addCategory: async (parent, { name }) => {
-        try {
-            let c = new categoryModel({ _id: new mongoose.Types.ObjectId(), name });
-            await c.save();
-        } catch (e) {
-            // ToDo: handle error
-        }
+
+        let c = new categoryModel({ name });
+        await c.save();
 
         return name;
     }
 };
 
 export const entities = {
-    Date: {
+    WorkshopDateInterval: {
         startTime: p => new Date(p.startTime).toISOString(),
         endTime: p => new Date(p.endTime).toISOString()
     },
