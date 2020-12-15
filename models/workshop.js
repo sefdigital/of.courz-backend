@@ -40,10 +40,15 @@ const workshopSchema = mongoose.Schema({
 });
 
 workshopSchema.methods.getEventById = function (eventID) {
-    const events = this.events.filter(a => a._id.toString() === eventID);
+    const events = this.events.filter(a => a._id.toString() === eventID.toString());
 
     if (events.length === 0) return null;
     else return events[0];
 };
+
+export function convertCategoriesToString(workshop) {
+    workshop.categories = workshop.categories.map(category => category.name);
+    return workshop;
+}
 
 export const workshopModel = mongoose.model("workshop", workshopSchema);

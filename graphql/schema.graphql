@@ -125,6 +125,7 @@ type Query {
 
     # PAYMENTS
     getOrderDetails(id: String!): Order
+    myOrders: [Order!]!
 }
 
 type Mutation {

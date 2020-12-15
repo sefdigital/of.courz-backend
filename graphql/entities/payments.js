@@ -1,6 +1,7 @@
 import { createOrder } from "../../logic/orders/createOrder";
 import * as middlewares from "../middlewares";
 import { orderModel } from "../../models/order";
+import { workshopModel } from "../../models/workshop";
 
 export const queries = {
     getOrderDetails: async (parent, { id }, { user }) => {
@@ -13,9 +14,13 @@ export const queries = {
         order = await order.populate("workshop").execPopulate();
         order = { ...order.toJSON(), event: order.workshop.getEventById(order.event.toString()) };
 
-        console.log(order);
-
         return order;
+    },
+    myOrders: async (parent, params, { user }) => {
+
+        middlewares.isAuthorized(user);
+
+        return await orderModel.find({ user: user._id });
     }
 };
 
@@ -27,4 +32,11 @@ export const mutations = {
         return await createOrder({ ...parameters, user });
     },
 
+};
+
+export const entity = {
+    Order: {
+        workshop: async o => await workshopModel.findOne({ _id: o.workshop }),
+        event: async o => (await workshopModel.findOne({ _id: o.workshop })).getEventById(o.event)
+    }
 };

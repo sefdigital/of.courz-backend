@@ -3,18 +3,9 @@ import { categoryModel } from "../../models/category";
 import { ratingModel } from "../../models/rating";
 import * as middlewares from "../middlewares";
 
-function convertCategoriesToString(workshop) {
-    workshop.categories = workshop.categories.map(category => category.name);
-    return workshop;
-}
-
 export const queries = {
     allWorkshops: async () => {
-        let workshops = await workshopModel.find({}).populate("categories").populate("organizer").exec();
-
-        workshops = workshops.map(w => w.toObject()).map(convertCategoriesToString);
-
-        return workshops;
+        return await workshopModel.find({}).populate("categories").populate("organizer").exec();
     }
 };
 
@@ -53,6 +44,7 @@ export const entities = {
         endTime: p => new Date(p.endTime).toISOString()
     },
     Workshop: {
-        ratings: async w => await Promise.all(w.ratings.map(async r => await ratingModel.findOne({ _id: r })))
+        ratings: async w => await Promise.all(w.ratings.map(async r => await ratingModel.findOne({ _id: r }))),
+        categories: async w => (await w.populate("categories").execPopulate()).categories.map(c => c.name)
     }
 };
