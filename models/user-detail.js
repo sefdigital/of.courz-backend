@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 const userDetailSchema = mongoose.Schema({
     _id: { type: String, required: true },
     firstName: { type: String, required: true },
-    lastName: { type: String, required: false },
+    lastName: { type: String, default: "" },
     organizer: { type: Boolean, default: false },
-    profilePicture: { type: String }
+    profilePicture: { type: String },
+    email: { type: String, required: true },
+    occupation: String,
+    birthday: Date
 });
 
 export const userDetailModel = mongoose.model("user-detail", userDetailSchema);
@@ -14,7 +17,7 @@ export function createUserDetail(user) {
     const userDetail = new userDetailModel({
         _id: user.uid,
         firstName: user.displayName,
-        lastName: "",
+        email: user.email,
         profilePicture: user.photoURL
     });
 

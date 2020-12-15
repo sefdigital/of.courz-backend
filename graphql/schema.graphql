@@ -1,3 +1,6 @@
+scalar Date
+scalar URL
+
 # - - - - - - - - - - - -
 # WORKSHOP
 # - - - - - - - - - - - -
@@ -11,7 +14,7 @@ type Workshop {
     material: String
     requirements: String
     categories: [String!]!
-    thumbnail: String!
+    thumbnail: URL!
     events: [Event!]!
     ratings: [Rating!]!
 }
@@ -23,7 +26,7 @@ input WorkshopInput {
     material: String
     requirements: String
     categories: [String!]!
-    thumbnail: String!
+    thumbnail: URL!
     events: [EventInput!]!
 }
 
@@ -34,7 +37,7 @@ type Event {
     publicLocation: String!
     privateLocation: String
     maxParticipants: Int!
-    dates: [Date!]!
+    dates: [WorkshopDateInterval!]!
 }
 
 input EventInput {
@@ -43,15 +46,15 @@ input EventInput {
     publicLocation: String!
     privateLocation: String
     maxParticipants: Int!
-    dates: [DateInput!]!
+    dates: [WorkshopDateIntervalInput!]!
 }
 
-type Date {
+type WorkshopDateInterval {
     startTime: String!
     endTime: String!
 }
 
-input DateInput {
+input WorkshopDateIntervalInput {
     startTime: String
     endTime: String
 }
@@ -81,8 +84,20 @@ input RatingInput {
 # - - - - - - - - - - - -
 
 type User {
+    _id: ID!
     firstName: String!
     lastName: String!
+    profilePicture: URL!
+    occupation: String
+    birthday: Date
+}
+
+input UserInput {
+    firstName: String
+    lastName: String
+    profilePicture: URL
+    occupation: String
+    birthday: Date
 }
 
 # - - - - - - - - - - - -
@@ -101,8 +116,12 @@ type Order {
 type Query {
 
     # WORKSHOPS
-    workshops: [Workshop]
+    allWorkshops: [Workshop]
 
+    # USER
+    me: User
+
+    # PAYMENTS
     getOrderDetails(id: String!): Order
 }
 
@@ -113,7 +132,9 @@ type Mutation {
     addCategory(name: String!): String
     addRating(workshop: String! rating: RatingInput!): Rating
 
+    # USER
+    updateUserData(user: UserInput): User!
+
     # PAYMENTS
     createOrder(workshopID: String!, eventID: String!, participants: Int!, affiliate: String): String # returns order id
-
 }

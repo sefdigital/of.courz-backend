@@ -10,8 +10,8 @@ function convertCategoriesToString(workshop) {
 }
 
 export const queries = {
-    workshops: async () => {
-        let workshops = await workshopModel.find({}).populate("categories");
+    allWorkshops: async () => {
+        let workshops = await workshopModel.find({}).populate("categories").populate("organizer").exec();
 
         workshops = workshops.map(w => w.toObject()).map(convertCategoriesToString);
 

@@ -17,7 +17,7 @@ const workshopSchema = mongoose.Schema({
     title: { type: String, required: true },
     subTitle: { type: String },
     visibility,
-    organizer: { type: String, required: true },
+    organizer: { type: String, required: true, ref: "user-detail" },
     events: [{
         _id: { type: ObjectId, required: true, auto: true },
         price: { type: Number, required: true },

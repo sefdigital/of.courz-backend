@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { resolvers } from "./graphql/entities/index";
+import { resolvers } from "./graphql/resolver";
 import { connect } from "./models";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
