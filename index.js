@@ -6,6 +6,7 @@ import * as admin from "firebase-admin";
 import { ApolloServer } from "apollo-server-cloud-functions";
 import { handleWebhook } from "./paypal/webhooks.js";
 import util from "util";
+import { createUserDetail, deleteUserDetails } from "./models/user-detail";
 
 admin.initializeApp();
 
@@ -45,5 +46,6 @@ export const handler = server.createHandler({
 connect();
 
 export const api = europeFunction.https.onRequest(handler);
-
 export const paypal = europeFunction.https.onRequest(handleWebhook);
+export const registerUser = europeFunction.auth.user().onCreate(createUserDetail);
+export const deleteUser = europeFunction.auth.user().onDelete(deleteUserDetails);
