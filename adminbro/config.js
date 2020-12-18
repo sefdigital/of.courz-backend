@@ -1,6 +1,5 @@
 import AdminBro from "admin-bro";
 import AdminBroMongoose from "@admin-bro/mongoose";
-import { buildHandler } from "@admin-bro/firebase-functions";
 import { workshopModel } from "../models/workshop";
 import { ratingModel } from "../models/rating";
 import { orderModel } from "../models/order";
@@ -21,7 +20,7 @@ const userNavigation = {
     name: "Alles zu Usern"
 };
 
-const AdminBroOptions = {
+export const AdminBroOptions = {
     resources: [
         {
             resource: workshopModel, options: {
@@ -78,12 +77,3 @@ const AdminBroOptions = {
         companyName: "SEF Workshops"
     }
 };
-
-export const adminBroHandler = buildHandler(AdminBroOptions, {
-    auth: {
-        secret: process.env.PAYPAL_CLIENT_ID,
-        authenticate: (email, password) => {
-            return email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD;
-        }
-    }
-});

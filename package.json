@@ -2,10 +2,11 @@
   "name": "sef-workshops-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "node.js",
+  "main": "common.js",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore --fix .",
     "test": "echo run tests",
+    "bundle-adminbro": "node -r esm adminbro/bundle.js",
     "serve": "firebase emulators:start",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"

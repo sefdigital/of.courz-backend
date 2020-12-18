@@ -7,7 +7,7 @@ import { ApolloServer } from "apollo-server-cloud-functions";
 import { handleWebhook } from "./paypal/webhooks.js";
 import util from "util";
 import { createUserDetail, deleteUserDetails } from "./models/user-detail";
-import { adminBroHandler } from "./adminbro/config";
+import { adminBroHandler } from "./adminbro/index";
 
 admin.initializeApp();
 
