@@ -26,7 +26,7 @@ const AdminBroOptions = {
         {
             resource: workshopModel, options: {
                 navigation: contentNavigation,
-                listProperties: ["id", "title", "organizer", "events"],
+                listProperties: ["_id", "title", "organizer", "events"],
                 properties: {
                     organizer: {
                         reference: "user-detail"
@@ -50,7 +50,12 @@ const AdminBroOptions = {
             resource: orderModel,
             options: {
                 navigation: orderNavigation,
-                listProperties: ["_id", "workshop", "price", "status", "affiliate"]
+                listProperties: ["_id", "workshop", "price", "status", "affiliate"],
+                properties: {
+                    user: {
+                        reference: "user-detail"
+                    }
+                }
             }
         },
         {
@@ -60,7 +65,7 @@ const AdminBroOptions = {
                 properties: {
                     profilePicture: {
                         components: {
-                            show: AdminBro.bundle("./image-component")
+                            show: AdminBro.bundle("./profile-picture-component")
                         }
                     }
                 }
