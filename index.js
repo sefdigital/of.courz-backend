@@ -7,10 +7,11 @@ import { ApolloServer } from "apollo-server-cloud-functions";
 import { handleWebhook } from "./paypal/webhooks.js";
 import util from "util";
 import { createUserDetail, deleteUserDetails } from "./models/user-detail";
+import { adminBroHandler } from "./adminbro/config";
 
 admin.initializeApp();
 
-const region = "europe-west3"; // Frankfurt 
+export const region = "europe-west3"; // Frankfurt
 const europeFunction = functions.region(region);
 
 console.logFull = input => console.log(util.inspect(input, { showHidden: false, depth: null }));
@@ -49,3 +50,4 @@ export const api = europeFunction.https.onRequest(handler);
 export const paypal = europeFunction.https.onRequest(handleWebhook);
 export const registerUser = europeFunction.auth.user().onCreate(createUserDetail);
 export const deleteUser = europeFunction.auth.user().onDelete(deleteUserDetails);
+export const adminBro = europeFunction.https.onRequest(adminBroHandler);
