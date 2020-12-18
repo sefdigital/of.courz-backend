@@ -14,7 +14,7 @@ export async function createOrder(orderDetails) {
         throw new Error("Didn't find specified workshop");
 
     workshop.events.forEach((event) => {
-        if (event._id.toString() === eventID)
+        if (event._id.toString() === eventID.toString())
             price = event.price;
     });
 
@@ -26,7 +26,7 @@ export async function createOrder(orderDetails) {
     const paypalOrder = await createPaypalOrder({ ...orderDetails, price }, workshop);
 
     let order = new orderModel({
-        order: paypalOrder.id,
+        _id: paypalOrder.id,
         workshop: workshopID,
         event: eventID,
         user: user._id,

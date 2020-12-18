@@ -11,10 +11,10 @@ export const paymentStatusCodes = {
 };
 
 const orderSchema = mongoose.Schema({
-    order: { type: String, required: true }, // paypal order id
+    _id: { type: String, required: true }, // paypal order id
     workshop: { type: ObjectId, ref: "workshop", required: true },
     event: { type: ObjectId, required: true },
-    user: { type: String, required: true },
+    user: { type: String, required: true, ref: "user-detail" },
     price: { type: Number, required: true },
     status: { type: String, enum: Object.values(paymentStatusCodes) },
     affiliate: String
