@@ -35,7 +35,6 @@ const workshopSchema = mongoose.Schema({
     material: String,
     description: { type: String, required: true },
     categories: [{ type: ObjectId, ref: "category" }],
-    ratings: [{ type: ObjectId, ref: "rating" }],
     thumbnail: { type: mongoose.SchemaTypes.Url, required: true },
 });
 
