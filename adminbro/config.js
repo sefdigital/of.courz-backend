@@ -13,28 +13,59 @@ const contentNavigation = {
     name: "Alles zu Workshops",
 };
 
+const orderNavigation = {
+    name: "Alles zu Bestellungen"
+};
+
+const userNavigation = {
+    name: "Alles zu Usern"
+};
+
 const AdminBroOptions = {
     resources: [
         {
             resource: workshopModel, options: {
                 navigation: contentNavigation,
-                listProperties: ["id", "title", "organizer", "events"]
+                listProperties: ["id", "title", "organizer", "events"],
+                properties: {
+                    organizer: {
+                        reference: "user-detail"
+                    }
+                }
             }
         },
         { resource: categoryModel, options: { navigation: contentNavigation } },
         {
             resource: ratingModel, options: {
                 navigation: contentNavigation,
-                listProperties: ["workshop", "content", "composition", "clarity", "expertise", "goalAchievement", "text"]
-            }
+                listProperties: ["workshop", "author", "average", "text"],
+                properties: {
+                    author: {
+                        reference: "user-detail"
+                    }
+                }
+            },
         },
-        { resource: orderModel,
+        {
+            resource: orderModel,
             options: {
-                navigation: contentNavigation,
+                navigation: orderNavigation,
                 listProperties: ["_id", "workshop", "price", "status", "affiliate"]
             }
         },
-        { resource: userDetailModel, options: { navigation: contentNavigation } },
+        {
+            resource: userDetailModel, options: {
+                navigation: userNavigation,
+                listProperties: ["_id", "email", "firstName", "lastName", "organizer", "occupation"],
+                properties: {
+                    profilePicture: {
+                        components: {
+                            show: AdminBro.bundle("./image-component")
+                        }
+                    }
+                }
+            }
+        },
     ],
     databases: [],
     rootPath: "/",
