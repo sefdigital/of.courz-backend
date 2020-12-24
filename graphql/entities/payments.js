@@ -34,6 +34,7 @@ export const mutations = {
 export const entity = {
     Order: {
         workshop: async o => await workshopModel.findOne({ _id: o.workshop }),
-        event: async o => (await workshopModel.findOne({ _id: o.workshop })).getEventById(o.event)
+        event: async o => (await workshopModel.findOne({ _id: o.workshop })).getEventById(o.event),
+        timestamp: o => new Date(o.timestamp).toISOString()
     }
 };

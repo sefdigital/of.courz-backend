@@ -1,4 +1,5 @@
 scalar Date
+scalar DateTime
 scalar URL
 scalar ObjectId
 
@@ -108,12 +109,13 @@ input UserInput {
 # - - - - - - - - - - - -
 
 type Order {
-    order: ID!
+    _id: ID!
     workshop: Workshop!
     event: Event!
     user: User!
     price: Float!
     status: String!
+    timestamp: DateTime!
 }
 
 type Query {

@@ -10,7 +10,7 @@ import {
 } from "./entities/payments";
 import { mutations as ratingMutations, queries as ratingQueries } from "./entities/ratings";
 import { queries as userQueries, mutations as userMutations, entities as userEntities } from "./entities/user";
-import { DateResolver, URLResolver } from "graphql-scalars";
+import { DateResolver, URLResolver, DateTimeResolver } from "graphql-scalars";
 import GraphQLObjectId from "graphql-scalar-objectid";
 
 export const resolvers = {
@@ -32,5 +32,6 @@ export const resolvers = {
 
     Date: DateResolver,
     URL: URLResolver,
-    ObjectId: GraphQLObjectId
+    ObjectId: GraphQLObjectId,
+    DateTime: DateTimeResolver
 };
