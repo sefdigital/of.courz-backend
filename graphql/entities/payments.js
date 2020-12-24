@@ -17,7 +17,7 @@ export const queries = {
 
         middlewares.isAuthorized(user);
 
-        return await orderModel.find({ user: user._id });
+        return await orderModel.find({ user: user._id }, null, { sort: { timestamp: "desc" } });
     }
 };
 
