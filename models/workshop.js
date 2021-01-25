@@ -33,6 +33,7 @@ const workshopSchema = mongoose.Schema({
     }],
     requirements: String,
     material: String,
+    created: { type: Date, required: false, default: () => Date.now() },
     description: { type: String, required: true },
     categories: [{ type: ObjectId, ref: "category" }],
     thumbnail: { type: mongoose.SchemaTypes.Url, required: true },
