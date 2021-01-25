@@ -1,5 +1,6 @@
 import { userDetailModel } from "../models/user-detail";
 import { orderModel } from "../models/order";
+import { workshopModel } from "../models/workshop";
 
 export function isAuthorized(user) {
     if (!user) throw new Error("Unauthorized");
@@ -12,6 +13,15 @@ export async function hasBookedWorkshop(user, workshopID) {
 
     if (!exists) throw new Error("No booking for this workshop");
     else return true;
+}
+
+export async function isOrganizerOfEvent(user, event) {
+    return await workshopModel.exists({ organizer: user._id, events: { $elemMatch: { _id: event._id } } });
+}
+
+// ToDo: check the booking status
+export async function hasBookedEvent(user, event) {
+    return await orderModel.exists({ event: event._id, user: user._id });
 }
 
 export async function isOrganizer(user) {

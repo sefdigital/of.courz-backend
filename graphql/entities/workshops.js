@@ -5,7 +5,7 @@ import * as middlewares from "../middlewares";
 
 export const queries = {
     allWorkshops: async () => {
-        return await workshopModel.find({}).populate("categories").populate("organizer").exec();
+        return await workshopModel.find({}).exec();
     }
 };
 
@@ -44,7 +44,14 @@ export const entities = {
         endTime: p => new Date(p.endTime).toISOString()
     },
     Workshop: {
-        ratings: async w => await Promise.all(w.ratings.map(async r => await ratingModel.findOne({ _id: r }))),
+        organizer: async w => (await w.populate("organizer").execPopulate()).organizer,
+        ratings: async w => await ratingModel.find({ workshop: w._id }),
         categories: async w => (await w.populate("categories").execPopulate()).categories.map(c => c.name)
+    },
+    Event: {
+        privateLocation: async (event, ignore, { user }) => {
+            const allowed = (await middlewares.isAuthorized(user)) && (await middlewares.isOrganizerOfEvent(user, event)) || (await middlewares.hasBookedEvent(user, event));
+            if (allowed) return event.privateLocation;
+        }
     }
 };

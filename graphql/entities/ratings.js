@@ -21,3 +21,9 @@ export const mutations = {
         return rating;
     },
 };
+
+export const entities = {
+    Rating: {
+        author: async r => (await r.populate("author").execPopulate()).author
+    }
+};

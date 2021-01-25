@@ -4,13 +4,17 @@ import {
     queries as workshopQueries
 } from "./entities/workshops";
 import {
-    queries as paymentQueries,
+    entity as paymentEntities,
     mutations as paymentMutations,
-    entity as paymentEntities
+    queries as paymentQueries
 } from "./entities/payments";
-import { mutations as ratingMutations, queries as ratingQueries } from "./entities/ratings";
-import { queries as userQueries, mutations as userMutations, entities as userEntities } from "./entities/user";
-import { DateResolver, URLResolver, DateTimeResolver } from "graphql-scalars";
+import {
+    entities as ratingsEntities,
+    mutations as ratingMutations,
+    queries as ratingQueries
+} from "./entities/ratings";
+import { entities as userEntities, mutations as userMutations, queries as userQueries } from "./entities/user";
+import { DateResolver, DateTimeResolver, URLResolver } from "graphql-scalars";
 import GraphQLObjectId from "graphql-scalar-objectid";
 
 export const resolvers = {
@@ -29,6 +33,7 @@ export const resolvers = {
     ...workshopEntities,
     ...userEntities,
     ...paymentEntities,
+    ...ratingsEntities,
 
     Date: DateResolver,
     URL: URLResolver,
