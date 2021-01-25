@@ -25,6 +25,6 @@ export const mutations = {
 
 export const entities = {
     User: {
-        birthday: u => new Date(u.birthday).toISOString().substr(0, 10)
+        birthday: u => u.birthday ? new Date(u.birthday).toISOString().substr(0, 10) : new Date().toISOString().substr(0, 10)
     }
 };
