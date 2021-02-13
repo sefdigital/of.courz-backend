@@ -2,9 +2,10 @@ import AdminBro from "admin-bro";
 import AdminBroMongoose from "@admin-bro/mongoose";
 import { workshopModel } from "../models/workshop";
 import { ratingModel } from "../models/rating";
-import { orderModel } from "../models/order";
+import { orderModel, paymentStatusCodes } from "../models/order";
 import { userDetailModel } from "../models/user-detail";
 import { categoryModel } from "../models/category";
+import fetch from "node-fetch";
 
 AdminBro.registerAdapter(AdminBroMongoose);
 
@@ -37,7 +38,7 @@ export const AdminBroOptions = {
         {
             resource: ratingModel, options: {
                 navigation: contentNavigation,
-                listProperties: ["workshop", "author", "average", "text"],
+                listProperties: ["workshop", "author", "text"],
                 properties: {
                     author: {
                         reference: "user-detail"
@@ -54,6 +55,26 @@ export const AdminBroOptions = {
                     user: {
                         reference: "user-detail"
                     }
+                },
+                actions: {
+                    statistics: {
+                        actionType: "resource",
+                        handler: async (request, response) => {
+                            const countLastDay = await orderModel.count({ createdAt: { $gte: Date.now() - 1000 * 60 * 60 * 24 } });
+                            const countLastDayPayed = await orderModel.count({
+                                createdAt: { $gte: Date.now() - 1000 * 60 * 60 * 24 },
+                                status: paymentStatusCodes.PAYED
+                            });
+                            const countAll = await orderModel.count();
+                            response.status(200).json({
+                                count: {
+                                    all: countAll,
+                                    lastDay: countLastDay,
+                                    lastDayPayed: countLastDayPayed
+                                }
+                            });
+                        },
+                    },
                 }
             }
         },
@@ -67,13 +88,33 @@ export const AdminBroOptions = {
                             show: AdminBro.bundle("./profile-picture-component")
                         }
                     }
+                },
+                actions: {
+                    statistics: {
+                        actionType: "resource",
+                        handler: async (request, response) => {
+                            const countLastDay = await userDetailModel.count({ createdAt: { $gte: Date.now() - 1000 * 60 * 60 * 24 } });
+                            const countAll = await userDetailModel.count();
+                            response.status(200).json({ count: { all: countAll, lastDay: countLastDay } });
+                        },
+                    },
                 }
             }
         },
     ],
     databases: [],
     rootPath: "/",
+    dashboard: {
+        handler: async () => {
+            const response = await fetch(`https://plausible.io/api/v1/stats/aggregate?site_id=${"of.courz.de"}&period=day&metrics=visitors,pageviews`,
+                    { headers: { "Authorization": `Bearer ${process.env.PLAUSIBLE_API_KEY}` } }),
+                json = await response.json();
+            console.log(json);
+            return json;
+        },
+        component: AdminBro.bundle("./my-dashboard-component")
+    },
     branding: {
-        companyName: "SEF Workshops"
+        companyName: "of.courz"
     }
 };
