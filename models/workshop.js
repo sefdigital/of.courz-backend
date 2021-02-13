@@ -37,7 +37,7 @@ const workshopSchema = mongoose.Schema({
     description: { type: String, required: true },
     categories: [{ type: ObjectId, ref: "category" }],
     thumbnail: { type: mongoose.SchemaTypes.Url, required: true },
-});
+}, { timestamps: true });
 
 workshopSchema.methods.getEventById = function (eventID) {
     const events = this.events.filter(a => a._id.toString() === eventID.toString());

@@ -9,7 +9,7 @@ const userDetailSchema = mongoose.Schema({
     email: { type: String, required: true },
     occupation: String,
     birthday: Date
-});
+}, { timestamps: true });
 
 export const userDetailModel = mongoose.model("user-detail", userDetailSchema);
 

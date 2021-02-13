@@ -16,10 +16,9 @@ const orderSchema = mongoose.Schema({
     event: { type: ObjectId, required: true },
     user: { type: String, required: true, ref: "user-detail" },
     price: { type: Number, required: true },
-    timestamp: { type: Date, required: false, default: () => Date.now() },
     status: { type: String, enum: Object.values(paymentStatusCodes) },
     affiliate: String
-});
+}, { timestamps: true });
 
 orderSchema.methods.updateStatus = (status) => {
     switch (status) {

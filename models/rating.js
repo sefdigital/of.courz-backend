@@ -24,7 +24,7 @@ const ratingSchema = mongoose.Schema({
     text: { type: String },
     improveable: { type: String }
 
-});
+}, { timestamps: true });
 
 ratingSchema.virtual("average").get(function () {
     return (this.content + this.composition + this.clarity + this.expertise + this.goalAchievement) / 5;
