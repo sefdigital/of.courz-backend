@@ -16,7 +16,7 @@ export const userDetailModel = mongoose.model("user-detail", userDetailSchema);
 export function createUserDetail(user) {
     const userDetail = new userDetailModel({
         _id: user.uid,
-        firstName: user.displayName || "Du", // ToDo: handle username correctly for email and password signups
+        firstName: user.displayName || "Kunde",
         email: user.email,
         profilePicture: user.photoURL
     });
