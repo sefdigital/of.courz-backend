@@ -61,24 +61,55 @@ input WorkshopDateIntervalInput {
     endTime: String
 }
 
+# - - - - - - - - - - - -
+# Ratings
+# - - - - - - - - - - - -
+
 type Rating {
     _id: ObjectId!
-    content: Int!
-    composition: Int!
-    clarity: Int!
-    expertise: Int!
-    goalAchievement: Int!
-    text: String!
     author: User
+    organizerRating: OrganizerRating
+    workshopRating: WorkshopRating
+    text: String
+    improveable: String
+
+}
+
+type OrganizerRating {
+    friendly: Boolean!
+    reliable: Boolean!
+    knowledge: Boolean!
+    patience: Boolean!
+    rating: Int!
+}
+
+type WorkshopRating {
+    recommendable: Boolean!
+    content: Boolean!
+    entertaining: Boolean!
+    rating: Int!
 }
 
 input RatingInput {
-    content: Int!
-    composition: Int!
-    clarity: Int!
-    expertise: Int!
-    goalAchievement: Int!
-    text: String!
+    organizerRating: OrganizerRatingInput
+    workshopRating: WorkshopRatingInput
+    text: String
+    improveable: String
+}
+
+input OrganizerRatingInput {
+    friendly: Boolean!
+    reliable: Boolean!
+    knowledge: Boolean!
+    patience: Boolean!
+    rating: Int!
+}
+
+input WorkshopRatingInput {
+    recommendable: Boolean!
+    content: Boolean!
+    entertaining: Boolean!
+    rating: Int!
 }
 
 # - - - - - - - - - - - -
@@ -142,5 +173,5 @@ type Mutation {
     updateUserData(user: UserInput): User!
 
     # PAYMENTS
-    createOrder(workshopID: ObjectId!, eventID: ObjectId!, participants: Int!, affiliate: String): String # returns order id
+    createOrder(workshopID: ObjectId!, eventID: ObjectId!, participants: Int!, affiliate: String): String # returns details id
 }

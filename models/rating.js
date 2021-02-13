@@ -4,13 +4,26 @@ import ObjectId from "mongoose/lib/schema/objectid";
 const ratingSchema = mongoose.Schema({
     _id: { type: ObjectId, required: true, auto: true },
     workshop: { type: ObjectId, required: true, ref: "workshop" },
-    content: { type: Number, required: true },
-    composition: { type: Number, required: true },
-    clarity: { type: Number, required: true },
-    expertise: { type: Number, required: true },
-    goalAchievement: { type: Number, required: true },
+    author: { type: String, required: true, ref: "user-detail"},
+
+    organizerRating: {
+        friendly: { type: Boolean, required: true },
+        reliable: { type: Boolean, required: true },
+        knowledge: { type: Boolean, required: true },
+        patience: { type: Boolean, required: true },
+        rating: { type: Number, required: true },
+    },
+
+    workshopRating: {
+        recommendable: { type: Boolean, required: true },
+        content: { type: Boolean, required: true },
+        entertaining: { type: Boolean, required: true },
+        rating: { type: Number, required: true }
+    },
+
     text: { type: String },
-    author: { type: String, required: true, ref: "user-detail"}
+    improveable: { type: String }
+
 });
 
 ratingSchema.virtual("average").get(function () {
