@@ -7,14 +7,24 @@ scalar ObjectId
 # WORKSHOP
 # - - - - - - - - - - - -
 
+enum Visiblity {
+    VISIBLE,
+    HIDDEN,
+    CHECK_PENDING
+}
+
 type Workshop {
     _id: ObjectId!
     title: String!
     subTitle: String
-    organizer: User
+    organizer: User!
+    visibility: Visiblity!
+
+    takeaway: String!
     description: String!
-    material: String
+    content: String
     requirements: String
+
     categories: [String!]!
     thumbnail: URL!
     events: [Event!]!
@@ -24,9 +34,12 @@ type Workshop {
 input WorkshopInput {
     title: String!
     subTitle: String
+
+    takeaway: String!
     description: String!
-    material: String
+    content: String
     requirements: String
+
     categories: [String!]!
     thumbnail: URL!
     events: [EventInput!]!
@@ -34,16 +47,18 @@ input WorkshopInput {
 
 type Event {
     _id: ObjectId!
-    price: Float
+    visibility: Visiblity!
+    price: Int!
     notes: String
     publicLocation: String!
     privateLocation: String
     maxParticipants: Int!
+    currentParticipants: Int!
     dates: [WorkshopDateInterval!]!
 }
 
 input EventInput {
-    price: Float
+    price: Int
     notes: String
     publicLocation: String!
     privateLocation: String
@@ -68,11 +83,10 @@ input WorkshopDateIntervalInput {
 type Rating {
     _id: ObjectId!
     author: User
-    organizerRating: OrganizerRating
-    workshopRating: WorkshopRating
+    organizerRating: OrganizerRating!
+    workshopRating: WorkshopRating!
     text: String
     improveable: String
-
 }
 
 type OrganizerRating {
@@ -91,8 +105,8 @@ type WorkshopRating {
 }
 
 input RatingInput {
-    organizerRating: OrganizerRatingInput
-    workshopRating: WorkshopRatingInput
+    organizerRating: OrganizerRatingInput!
+    workshopRating: WorkshopRatingInput!
     text: String
     improveable: String
 }
@@ -144,8 +158,9 @@ type Order {
     workshop: Workshop!
     event: Event!
     user: User!
-    price: Float!
+    price: Int!
     status: String!
+    participants: Int!
     timestamp: DateTime!
 }
 
@@ -166,12 +181,11 @@ type Mutation {
 
     # WORKSHOPS
     addWorkshop(workshop: WorkshopInput): Workshop
-    addCategory(name: String!): String
     addRating(workshop: ObjectId! rating: RatingInput!): Rating
 
     # USER
     updateUserData(user: UserInput): User!
 
     # PAYMENTS
-    createOrder(workshopID: ObjectId!, eventID: ObjectId!, participants: Int!, affiliate: String): String # returns details id
+    createOrder(workshopID: ObjectId!, eventID: ObjectId!, participants: Int!, affiliate: String): String # returns order id
 }

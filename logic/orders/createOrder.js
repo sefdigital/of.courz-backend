@@ -1,4 +1,4 @@
-import { workshopModel } from "../../models/workshop";
+import { getParticipantsForEvent, visibilityEnum, workshopModel } from "../../models/workshop";
 import axios from "axios";
 import { DEFAULT_AXIOS_OPTIONS, paypalApiUrl } from "../../paypal/constants";
 import { orderModel, paymentStatusCodes } from "../../models/order";
@@ -6,18 +6,25 @@ import { orderModel, paymentStatusCodes } from "../../models/order";
 export async function createOrder(orderDetails) {
     const { workshopID, eventID, participants, user, affiliate } = orderDetails;
 
-    console.log(workshopID);
-
-    let workshop = await workshopModel.findOne({ _id: workshopID }), price = 0;
+    let workshop = await workshopModel.findOne({ _id: workshopID, visibility: visibilityEnum.VISIBLE }), price = 0, event;
 
     if (!workshop)
         throw new Error("Didn't find specified workshop");
 
-    workshop.events.forEach((event) => {
-        if (event._id.toString() === eventID.toString())
-            price = event.price;
+    workshop.events.forEach(eventIteration => {
+        if (eventIteration._id.toString() === eventID.toString()) {
+            if (eventIteration.visibility !== visibilityEnum.VISIBLE)
+                throw new Error("Didn't find specified Event");
+
+            event = eventIteration;
+            price = eventIteration.price;
+        }
     });
 
+    const bookedParticipants = await getParticipantsForEvent(workshopID, eventID);
+
+    if (bookedParticipants + participants > event.maxParticipants)
+        throw new Error(`Additional ${participants} people do not fit in the workshop`);
     if (price === 0)
         throw new Error("Didn't find specified event");
     if (participants <= 0)
@@ -32,12 +39,13 @@ export async function createOrder(orderDetails) {
         user: user._id,
         status: paymentStatusCodes.PENDING,
         affiliate,
-        price
+        participants,
+        price: price * participants
     });
 
     await order.save();
 
-    console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} with title ${workshop.title}`);
+    console.log(`Created order with a price of ${participants * price} for workshop ${workshopID} and ${participants} participants with title ${workshop.title}`);
 
     return paypalOrder.id;
 }

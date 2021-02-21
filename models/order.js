@@ -16,6 +16,7 @@ const orderSchema = mongoose.Schema({
     event: { type: ObjectId, required: true },
     user: { type: String, required: true, ref: "user-detail" },
     price: { type: Number, required: true },
+    participants: { type: Number, required: true },
     status: { type: String, enum: Object.values(paymentStatusCodes) },
     affiliate: String
 }, { timestamps: true });

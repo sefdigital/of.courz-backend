@@ -8,11 +8,7 @@ export const mutations = {
     addRating: async (parent, { workshop, rating }, { user }) => {
 
         await middleware.isAuthorized(user);
-        await middleware.hasBookedWorkshop(user, workshop);
-
-        const existingReview = await ratingModel.exists({ workshop, author: user._id });
-
-        if(existingReview) throw new Error("You already reviewed the workshop");
+        await middleware.ratingAllowed(user, workshop);
 
         rating = new ratingModel({ workshop, ...rating, author: user._id });
 

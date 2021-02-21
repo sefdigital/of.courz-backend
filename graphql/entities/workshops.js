@@ -1,11 +1,12 @@
-import { workshopModel } from "../../models/workshop";
+import { getParticipantsForEvent, visibilityEnum, workshopModel } from "../../models/workshop";
 import { categoryModel } from "../../models/category";
 import { ratingModel } from "../../models/rating";
 import * as middlewares from "../middlewares";
 
 export const queries = {
     allWorkshops: async () => {
-        return await workshopModel.find({}).exec();
+        let workshops = await workshopModel.find({ visibility: { $ne: visibilityEnum.CHECK_PENDING }, }).exec();
+        return workshops.map(w => w.removeEvents());
     }
 };
 
@@ -28,13 +29,6 @@ export const mutations = {
         console.log(`Created workshop ${workshop.title} by ${workshop.organizer}`);
 
         return workshop;
-    },
-    addCategory: async (parent, { name }) => {
-
-        let c = new categoryModel({ name });
-        await c.save();
-
-        return name;
     }
 };
 
@@ -52,6 +46,7 @@ export const entities = {
         privateLocation: async (event, ignore, { user }) => {
             const allowed = (await middlewares.isAuthorized(user)) && (await middlewares.isOrganizerOfEvent(user, event)) || (await middlewares.hasBookedEvent(user, event));
             if (allowed) return event.privateLocation;
-        }
+        },
+        currentParticipants: async e => await getParticipantsForEvent(null, e._id)
     }
 };
