@@ -135,7 +135,7 @@ type User {
     firstName: String!
     lastName: String!
     organizer: Boolean!
-    profilePicture: URL!
+    profilePicture: URL
     occupation: String
     birthday: Date
 }
