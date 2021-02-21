@@ -44,7 +44,8 @@ export const entities = {
     },
     Event: {
         privateLocation: async (event, ignore, { user }) => {
-            const allowed = (await middlewares.isAuthorized(user)) && (await middlewares.isOrganizerOfEvent(user, event)) || (await middlewares.hasBookedEvent(user, event));
+            const authorized = await middlewares.isAuthorized(user), organizer = await middlewares.isOrganizerOfEvent(user, event), booked = await middlewares.hasBookedEvent(user, event);
+            const allowed = authorized && (organizer || booked);
             if (allowed) return event.privateLocation;
         },
         currentParticipants: async e => await getParticipantsForEvent(null, e._id)
