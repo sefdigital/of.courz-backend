@@ -13,13 +13,17 @@ export async function createOrder(orderDetails) {
 
     workshop.events.forEach(eventIteration => {
         if (eventIteration._id.toString() === eventID.toString()) {
-            if (eventIteration.visibility !== visibilityEnum.VISIBLE)
-                throw new Error("Didn't find specified Event");
-
             event = eventIteration;
             price = eventIteration.price;
         }
     });
+
+    if (!event || event.visibility !== visibilityEnum.VISIBLE)
+        throw new Error("Didn't find specified Event");
+
+    const firstDate = event.dates.map(d => new Date(d.startTime)).sort((a, b) => a - b)[0];
+    if (firstDate < new Date())
+        throw new Error("Event has already started");
 
     const bookedParticipants = await getParticipantsForEvent(workshopID, eventID);
 
@@ -53,6 +57,8 @@ export async function createOrder(orderDetails) {
 async function createPaypalOrder(orderDetails, workshop) {
     const { workshopID, eventID, participants, price } = orderDetails;
 
+    const eurPrice = price / 100, eurPriceTotal = price * participants / 100;
+
     const { data } = await axios.post(paypalApiUrl("/v2/checkout/orders"), {
         "intent": "CAPTURE",
         "purchase_units": [
@@ -60,20 +66,20 @@ async function createPaypalOrder(orderDetails, workshop) {
                 reference_id: `${workshopID}-${eventID}`,
                 amount: {
                     currency_code: "EUR",
-                    value: price * participants,
+                    value: eurPriceTotal,
                     breakdown: {
                         item_total: {
                             currency_code: "EUR",
-                            value: price * participants,
+                            value: eurPriceTotal,
                         }
                     }
                 },
-                description: "Ihre Bestellung bei SEF Workshops. ",
+                description: "Ihre Bestellung bei of.courz.de. ",
                 items: [{
                     name: `${workshop.title} Workshop`,
                     unit_amount: {
                         currency_code: "EUR",
-                        value: price
+                        value: eurPrice
                     },
                     quantity: participants
                 }]
