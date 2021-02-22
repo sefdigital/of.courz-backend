@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import ObjectId from "mongoose/lib/schema/objectid";
 import { createAffiliateTransaction } from "../logic/affiliate/createAffiliateTransaction";
 import { businessLogic } from "../businessLogic";
+import { sendOrderSuccessfulMail } from "../mail";
 
 export const paymentStatusCodes = {
     PENDING: "PENDING",
@@ -26,6 +27,7 @@ orderSchema.methods.updateStatus = function (status) {
 
     switch (status) {
         case "PAYED":
+            sendOrderSuccessfulMail(this);
             this.initializeAffiliate();
             break;
     }

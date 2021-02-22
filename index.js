@@ -8,13 +8,11 @@ import { handleWebhook } from "./paypal/webhooks.js";
 import util from "util";
 import { createUserDetail, deleteUserDetails } from "./models/user-detail";
 import { adminBroHandler } from "./adminbro/index";
-import { subscribeNewUser } from "./mail";
-
 admin.initializeApp();
 
 export const region = "europe-west3"; // Frankfurt
-const europeFunction = functions.region(region);
 
+const europeFunction = functions.region(region);
 console.logFull = input => console.log(util.inspect(input, { showHidden: false, depth: null }));
 
 const typeDefs = readFileSync("graphql/schema.graphql", "utf8");
@@ -46,6 +44,8 @@ export const handler = server.createHandler({
 });
 
 connect();
+
+import { subscribeNewUser } from "./mail";
 
 export const api = europeFunction.https.onRequest(handler);
 export const paypal = europeFunction.https.onRequest(handleWebhook);

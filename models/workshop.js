@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import ObjectId from "mongoose/lib/schema/objectid";
 import { orderModel } from "./order";
+import dayjs from "dayjs";
+import "dayjs/locale/de";
 
 require("mongoose-type-url");
 
@@ -51,6 +53,27 @@ workshopSchema.methods.getEventById = function (eventID) {
     if (events.length === 0) return null;
     else return events[0];
 };
+
+export function addDateTimeString(date) {
+    const workshopDateFormatTemplate = "ddd, DD.MM.YYYY HH:mm";
+    dayjs.locale("de");
+
+    let dates = [dayjs(date.startTime), dayjs(date.endTime)];
+    let sameDay = dates[0].isSame(dates[1], "day");
+
+    let timeString;
+
+    if (sameDay)
+        timeString = `${dates[0].format(workshopDateFormatTemplate)} - ${dates[1].format("HH:mm")}`;
+    else
+        timeString = `${dates[0].format(workshopDateFormatTemplate)} - ${dates[1].format(workshopDateFormatTemplate)}`;
+
+    return {
+        startTime: +dayjs(date.startTime),
+        endTime: +dayjs(date.endTime),
+        timeString: timeString
+    };
+}
 
 export function convertCategoriesToString(workshop) {
     workshop.categories = workshop.categories.map(category => category.name);
