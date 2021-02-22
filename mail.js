@@ -20,7 +20,8 @@ export async function sendOrderSuccessfulMail(order) {
             "Einzelpreis": event.price / 100,
             "Menge": order.participants,
             "Gesamtpreis": order.price / 100,
-            "Bestellnummer": order._id
+            "Bestellnummer": order._id,
+            "kurslink": `https://of.courz.de/w/${order.workshop._id}`
         };
 
         await mailjetClient
