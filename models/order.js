@@ -21,15 +21,19 @@ const orderSchema = mongoose.Schema({
     affiliate: String
 }, { timestamps: true });
 
-orderSchema.methods.updateStatus = (status) => {
+orderSchema.methods.updateStatus = function (status) {
+    this.status = status;
+
     switch (status) {
         case "PAYED":
             this.initializeAffiliate();
             break;
     }
+
+    return this;
 };
 
-orderSchema.methods.initializeAffiliate = () => {
+orderSchema.methods.initializeAffiliate = function ( ) {
     if (!this.affiliate)
         return;
 
