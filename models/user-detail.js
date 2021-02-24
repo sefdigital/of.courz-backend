@@ -7,6 +7,10 @@ const userDetailSchema = mongoose.Schema({
     organizer: { type: Boolean, default: false },
     profilePicture: { type: String },
     email: { type: String, required: true },
+    contact: {
+        whatsapp: String,
+        messenger: String
+    },
     occupation: String,
     birthday: Date
 }, { timestamps: true });
@@ -14,6 +18,8 @@ const userDetailSchema = mongoose.Schema({
 export const userDetailModel = mongoose.model("user-detail", userDetailSchema);
 
 export function createUserDetail(user) {
+    console.log(`ADDING USER ${JSON.stringify(user)}`);
+
     const userDetail = new userDetailModel({
         _id: user.uid,
         firstName: user.displayName || "Kunde",

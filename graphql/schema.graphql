@@ -138,6 +138,8 @@ type User {
     profilePicture: URL
     occupation: String
     birthday: Date
+    email: String
+    contact: ContactInfos
 }
 
 input UserInput {
@@ -147,6 +149,17 @@ input UserInput {
     profilePicture: URL
     occupation: String
     birthday: Date
+    contact: ContactInfosInput
+}
+
+type ContactInfos {
+    whatsapp: URL
+    messenger: URL
+}
+
+input ContactInfosInput{
+    whatsapp: URL
+    messenger: URL
 }
 
 # - - - - - - - - - - - -
