@@ -4,7 +4,8 @@ import ObjectId from "mongoose/lib/schema/objectid";
 const ratingSchema = mongoose.Schema({
     _id: { type: ObjectId, required: true, auto: true },
     workshop: { type: ObjectId, required: true, ref: "workshop" },
-    author: { type: String, required: true, ref: "user-detail"},
+    organizer: { type: String, required: true, ref: "user-detail" },
+    author: { type: String, required: true, ref: "user-detail" },
 
     organizerRating: {
         friendly: { type: Boolean, required: true },
@@ -25,9 +26,5 @@ const ratingSchema = mongoose.Schema({
     improveable: { type: String }
 
 }, { timestamps: true });
-
-ratingSchema.virtual("average").get(function () {
-    return (this.content + this.composition + this.clarity + this.expertise + this.goalAchievement) / 5;
-});
 
 export const ratingModel = mongoose.model("rating", ratingSchema);
