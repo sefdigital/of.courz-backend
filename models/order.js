@@ -8,7 +8,8 @@ export const paymentStatusCodes = {
     PENDING: "PENDING",
     PAYED: "PAYED",
     REVIEW: "REVIEW",
-    REFUNDED: "REFUNDED"
+    REFUNDED: "REFUNDED",
+    SHOULD_BE_DELETED: "SHOULD_BE_DELETED"
 };
 
 const orderSchema = mongoose.Schema({
@@ -26,16 +27,16 @@ orderSchema.methods.updateStatus = function (status) {
     this.status = status;
 
     switch (status) {
-        case "PAYED":
-            sendOrderSuccessfulMail(this);
-            this.initializeAffiliate();
-            break;
+    case "PAYED":
+        sendOrderSuccessfulMail(this);
+        this.initializeAffiliate();
+        break;
     }
 
     return this;
 };
 
-orderSchema.methods.initializeAffiliate = function ( ) {
+orderSchema.methods.initializeAffiliate = function () {
     if (!this.affiliate)
         return;
 
@@ -46,3 +47,19 @@ orderSchema.methods.initializeAffiliate = function ( ) {
 };
 
 export const orderModel = mongoose.model("order", orderSchema);
+
+export function deleteUnpaidOrders() {
+
+    console.log("NOW DELETING UNPAID ORDERS");
+    orderModel.deleteMany({
+        createdAt: { $lt: new Date() - 7 * 24 * 60 * 60 * 1000 },
+        status: paymentStatusCodes.SHOULD_BE_DELETED
+    }).exec();
+
+    console.log("NOW MARKING FOR DELETION");
+    orderModel.updateMany({
+        createdAt: { $lt: new Date() - 60 * 60 * 1000 },
+        status: paymentStatusCodes.PENDING
+    }, { status: paymentStatusCodes.SHOULD_BE_DELETED }).exec();
+
+}

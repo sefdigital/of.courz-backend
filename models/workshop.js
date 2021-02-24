@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import ObjectId from "mongoose/lib/schema/objectid";
-import { orderModel } from "./order";
+import { orderModel, paymentStatusCodes } from "./order";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 
@@ -82,7 +82,13 @@ export function convertCategoriesToString(workshop) {
 
 export async function getParticipantsForEvent(workshopID, eventID) {
     const participants = await orderModel.aggregate([
-        { $match: workshopID ? { workshop: workshopID, event: eventID } : { event: eventID } },
+        {
+            $match: {
+                event: eventID,
+                status: { $nin: [ paymentStatusCodes.SHOULD_BE_DELETED, paymentStatusCodes.REFUNDED ] },
+                ...workshopID ? { workshop: workshopID } : {}
+            }
+        },
         {
             $group: {
                 _id: null,

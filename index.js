@@ -8,6 +8,9 @@ import { handleWebhook } from "./paypal/webhooks.js";
 import util from "util";
 import { createUserDetail, deleteUserDetails } from "./models/user-detail";
 import { adminBroHandler } from "./adminbro/index";
+import { subscribeNewUser } from "./mail";
+import { deleteUnpaidOrders as deleteUnpaidOrdersFunction } from "./models/order";
+
 admin.initializeApp();
 
 export const region = "europe-west3"; // Frankfurt
@@ -45,11 +48,10 @@ export const handler = server.createHandler({
 
 connect();
 
-import { subscribeNewUser } from "./mail";
-
 export const api = europeFunction.https.onRequest(handler);
 export const paypal = europeFunction.https.onRequest(handleWebhook);
 export const registerUser = europeFunction.auth.user().onCreate(createUserDetail);
 export const deleteUser = europeFunction.auth.user().onDelete(deleteUserDetails);
 export const adminBro = europeFunction.https.onRequest(adminBroHandler);
 export const newsletterSignup = europeFunction.https.onCall(data => subscribeNewUser(data.mail, data.firstName));
+export const deleteUnpaidOrders = europeFunction.pubsub.schedule("every 1 hours").onRun(deleteUnpaidOrdersFunction);
