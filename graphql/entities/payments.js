@@ -1,13 +1,13 @@
 import { createOrder } from "../../logic/orders/createOrder";
 import * as middlewares from "../middlewares";
-import { orderModel } from "../../models/order";
+import { orderModel, paymentStatusCodes } from "../../models/order";
 import { workshopModel } from "../../models/workshop";
 
 export const queries = {
     getOrderDetails: async (parent, { id }, { user }) => {
         middlewares.isAuthorized(user);
 
-        let order = await orderModel.findOne({ _id: id, user: user._id });
+        let order = await orderModel.findOne({ _id: id, user: user._id, status: { $ne: paymentStatusCodes.SHOULD_BE_DELETED} });
 
         if (!order) throw new Error("No order with specified id");
 
