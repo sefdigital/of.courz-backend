@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { subscribeNewUser } from "../mail";
 
 const userDetailSchema = mongoose.Schema({
     _id: { type: String, required: true },
@@ -28,6 +29,8 @@ export function createUserDetail(user) {
     });
 
     userDetail.save();
+    subscribeNewUser(userDetail.email, userDetail.firstName);
+
 }
 
 export function deleteUserDetails(user) {
