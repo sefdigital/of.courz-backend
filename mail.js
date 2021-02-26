@@ -11,7 +11,7 @@ export async function sendOrderSuccessfulMail(order) {
         const event = order.workshop.getEventById(order.event._id);
 
         const variables = {
-            "VNTrainer": order.workshop.organizer.firstName + order.workshop.organizer.lastName,
+            "VNTrainer": order.workshop.organizer.firstName + " " + order.workshop.organizer.lastName,
             "Voraussetzungen": order.workshop.requirements,
             "kursname": order.workshop.title,
             "NotizTrainer": event.notes || "0",
