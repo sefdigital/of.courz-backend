@@ -109,7 +109,7 @@ export const AdminBroOptions = {
     dashboard: {
         handler: async () => {
             const response = await fetch(`https://plausible.io/api/v1/stats/aggregate?site_id=${"of.courz.de"}&period=day&metrics=visitors,pageviews`,
-                { headers: { "Authorization": `Bearer ${functions.config().plausible.apikey}` } }),
+                    { headers: { "Authorization": `Bearer ${functions.config().plausible.apikey}` } }),
                 json = await response.json();
             console.log(json);
             return json;
