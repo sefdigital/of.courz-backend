@@ -6,6 +6,7 @@ import { orderModel, paymentStatusCodes } from "../models/order";
 import { userDetailModel } from "../models/user-detail";
 import { categoryModel } from "../models/category";
 import fetch from "node-fetch";
+import * as functions from "firebase-functions";
 
 AdminBro.registerAdapter(AdminBroMongoose);
 
@@ -82,6 +83,7 @@ export const AdminBroOptions = {
             resource: userDetailModel, options: {
                 navigation: userNavigation,
                 listProperties: ["_id", "email", "firstName", "lastName", "organizer", "occupation"],
+                editProperties: ["_id", "email", "firstName", "lastName", "organizer", "profilePicture", "contact.whatsapp", "contact.messenger", "occupation", "birthday"],
                 properties: {
                     profilePicture: {
                         components: {
@@ -107,7 +109,7 @@ export const AdminBroOptions = {
     dashboard: {
         handler: async () => {
             const response = await fetch(`https://plausible.io/api/v1/stats/aggregate?site_id=${"of.courz.de"}&period=day&metrics=visitors,pageviews`,
-                    { headers: { "Authorization": `Bearer ${process.env.PLAUSIBLE_API_KEY}` } }),
+                { headers: { "Authorization": `Bearer ${functions.config().plausible.apikey}` } }),
                 json = await response.json();
             console.log(json);
             return json;

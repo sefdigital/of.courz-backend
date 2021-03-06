@@ -1,7 +1,8 @@
 import mailjet from "node-mailjet";
 import { addDateTimeString } from "./models/workshop";
+import * as functions from "firebase-functions";
 
-const mailjetClient = mailjet.connect(process.env.MAILJET_PUBLIC, process.env.MAILJET_PRIVATE);
+const mailjetClient = mailjet.connect(functions.config().mailjet.public, functions.config().mailjet.private);
 
 export async function sendOrderSuccessfulMail(order) {
     try {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { DEFAULT_API_HEADER, paypalApiUrl } from "./constants";
 import { handleOrderApproved } from "./webhooks/order-approved";
+import * as functions from "firebase-functions";
 
 // ToDo: API idempotency https://developer.paypal.com/docs/platforms/develop/idempotency/
 
@@ -36,7 +37,7 @@ async function validateWebhook(body, header, retries = 10) {
             cert_url: header["paypal-cert-url"],
             auth_algo: header["paypal-auth-algo"],
             transmission_sig: header["paypal-transmission-sig"],
-            webhook_id: process.env.PAYPAL_WEBHOOK_ID,
+            webhook_id: functions.config().paypal.webhookid,
             webhook_event: body
         }, { headers: DEFAULT_API_HEADER, });
 

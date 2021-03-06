@@ -1,6 +1,7 @@
+import * as functions from "firebase-functions";
 
-export const PAYPAL_BASE_PATH = process.env.PAYPAL_BASE_PATH, PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID,
-    PAYPAL_SECRET = process.env.PAYPAL_SECRET;
+export const PAYPAL_BASE_PATH = functions.config().paypal.basepath, PAYPAL_CLIENT_ID = functions.config().paypal.clientid,
+    PAYPAL_SECRET = functions.config().paypal.secret;
 
 export const DEFAULT_API_HEADER = {
     "Content-Type": "application/json",

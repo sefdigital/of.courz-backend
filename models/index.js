@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import * as functions from "firebase-functions";
 
 export const db = mongoose.connection;
 
@@ -18,5 +19,5 @@ db.on("disconnected", () => {
 });
 
 export async function connect() {
-    await mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(functions.config().database.url, { useNewUrlParser: true, useUnifiedTopology: true });
 }
