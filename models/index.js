@@ -11,6 +11,7 @@ db.on("reconnected", () => console.log("MongoDB reconnected!"));
 db.on("error", error => {
     console.error("Error in MongoDb connection: " + error);
     mongoose.disconnect();
+    connect();
 });
 
 db.on("disconnected", () => {
@@ -19,5 +20,5 @@ db.on("disconnected", () => {
 });
 
 export async function connect() {
-    await mongoose.connect(functions.config().database.url, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(functions.config().database.url, { useNewUrlParser: true, useUnifiedTopology: true, autoReconnect: true });
 }
